@@ -19,6 +19,7 @@ class Gameboard extends Component {
                     id={cell.id}
                     element={cell.element}
                     reveal={cell.reveal}
+                    onClick={() => this.props.onClick(cell)}
                   />
                 )
               })}
