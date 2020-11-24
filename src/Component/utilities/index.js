@@ -1,14 +1,18 @@
 const board = (size) => {
   //each cell in the board has {id, color}
-  const board = []
+  const closedBoard = []
+  const openedBoard = []
   for (let i = 0; i < size; i++) {
-    const arr = []
+    const close = []
+    const open = []
     for (let j = 0; j < size; j++) {
-      arr.push({ id: [i, j], element: null, reveal: true })
+      close.push({ id: [i, j], element: null, reveal: false })
+      open.push({ id: [i, j], element: null, reveal: true })
     }
-    board.push(arr)
+    closedBoard.push(close)
+    openedBoard.push(open)
   }
-  return board
+  return { closedBoard, openedBoard }
 }
 
 const getRandomBombCells = (board, bombs) => {
@@ -106,15 +110,107 @@ const left = (i, j, board) => {
   }
 }
 
-
 const createBoard = (size) => {
   const gameBoard = board(size)
-  const randomBombCells = getRandomBombCells(gameBoard, size)
+  const randomBombCells = getRandomBombCells(gameBoard.openedBoard, size)
   while (randomBombCells.length) {
     let [row, column] = randomBombCells.pop()
-    gameBoard[row][column].element = '💣'
+    gameBoard.openedBoard[row][column].element = '💣'
+    gameBoard.closedBoard[row][column].element = '💣'
   }
 
-  return countNeighbors(gameBoard)
+  return {openedBoard: countNeighbors(gameBoard.openedBoard), closedBoard: countNeighbors(gameBoard.closedBoard)}
 }
+
+const writeBoard = (board, cellProp, revealedCount, openedBoard) => {
+  let [i, j] = cellProp.id
+  const element = cellProp.element
+
+  if (element === 0) {
+    return checkNeighbors(i, j, board)
+  } else if (element === '💣') {
+    return { board: openedBoard, revealedCount, gameOver: true}
+  } else {
+    board[i][j].reveal = true
+    revealedCount++
+    return { board, revealedCount, gameOver: false }
+  }
+}
+const checkNeighbors = (i, j, board, revealedCount) => {
+  let row = i, cell = j
+  let count = revealedCount
+  const openCellAndCount = (row, cell) => {
+    board[row][cell].reveal = true
+    count++
+  }
+  const resetRowAndColumn = () => {
+    row = i
+    cell = j
+  }
+  const elementIsZero = (row, cell) => {
+    return board[row][cell].element === 0
+  }
+  //go left
+  while (cell >= 0 && elementIsZero(row, cell)) {
+    openCellAndCount(row, cell)
+    cell--
+  }
+  //go right
+  resetRowAndColumn()
+  while (cell < board[row].length && elementIsZero(row, cell)) {
+    openCellAndCount(row, cell)
+    cell++
+  }
+
+  //go up
+  resetRowAndColumn()
+  while (row >= 0 && elementIsZero(row, cell)) {
+    openCellAndCount(row, cell)
+    row--
+  }
+
+  //go down
+  resetRowAndColumn()
+  while (row < board.length && elementIsZero(row, cell)) {
+    openCellAndCount(row, cell)
+    row++
+  }
+
+  //check diaganal
+  resetRowAndColumn()
+  //go toward top left
+  while (row >= 0 && cell >= 0 && elementIsZero(row, cell)) {
+    openCellAndCount(row, cell)
+    row--
+    cell--
+  }
+
+  //go toward top right
+  resetRowAndColumn()
+  while (row >= 0 && cell < board[row].length && elementIsZero(row, cell)) {
+    openCellAndCount(row, cell)
+    row--
+    cell++
+  }
+
+  //go toward bottom left
+  resetRowAndColumn()
+  while (row < board.length && cell >= 0 && elementIsZero(row, cell)) {
+    openCellAndCount(row, cell)
+    row++
+    cell--
+  }
+
+  //go toward bottom right
+  resetRowAndColumn()
+  while (row < board.length && cell < board.length && elementIsZero(row, cell)) {
+    openCellAndCount(row, cell)
+    row++
+    cell++
+  }
+  return { board, revealedCount: count, gameOver: false}
+}
+
+
 export default createBoard
+export { writeBoard }
