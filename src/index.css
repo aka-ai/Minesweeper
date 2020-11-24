@@ -11,3 +11,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+button {
+  font-size: 20px;
+  width: 70px;
+  height: 70px;
+  color: teal;
+  background: linear-gradient(259.07deg,
+  rgb(250, 247, 250) 4.07%,
+  rgb(249, 242, 248) 100%);
+  box-shadow: 0px 8px 20px
+  rgb(245, 244, 245);
+  background-color: #DAF8FF;
+  border-color: rgb(233, 233, 233); 
+  float: left;
+  font-weight: bold;
+}
+
+.App {
+  display: flex;
+  flex-direction: row;
+  width: 100vh;
+  margin: auto;
+}
+
+.game-board {
+  margin: auto;
+
+}
