@@ -119,7 +119,7 @@ const createBoard = (size) => {
     gameBoard.closedBoard[row][column].element = '💣'
   }
 
-  return {openedBoard: countNeighbors(gameBoard.openedBoard), closedBoard: countNeighbors(gameBoard.closedBoard)}
+  return { openedBoard: countNeighbors(gameBoard.openedBoard), closedBoard: countNeighbors(gameBoard.closedBoard) }
 }
 
 const writeBoard = (board, cellProp, revealedCount, openedBoard) => {
@@ -129,7 +129,7 @@ const writeBoard = (board, cellProp, revealedCount, openedBoard) => {
   if (element === 0) {
     return checkNeighbors(i, j, board)
   } else if (element === '💣') {
-    return { board: openedBoard, revealedCount, gameOver: true}
+    return { board: openedBoard, revealedCount, gameOver: true }
   } else {
     board[i][j].reveal = true
     revealedCount++
@@ -137,78 +137,48 @@ const writeBoard = (board, cellProp, revealedCount, openedBoard) => {
   }
 }
 const checkNeighbors = (i, j, board, revealedCount) => {
-  let row = i, cell = j
+  const stack = [[i, j, new Map()]]
+  const size = board.length
   let count = revealedCount
-  const openCellAndCount = (row, cell) => {
-    board[row][cell].reveal = true
+  const isVisited = (map, i, j) => {
+    if (map.has(i) && map.get(i).has(j)) {
+      return true
+    } else {
+      return false
+    }
+  }
+  while (stack.length) {
+    let [i, j, visited] = stack.pop()
+    board[i][j].reveal = true
     count++
-  }
-  const resetRowAndColumn = () => {
-    row = i
-    cell = j
-  }
-  const elementIsZero = (row, cell) => {
-    return board[row][cell].element === 0
-  }
-  //go left
-  while (cell >= 0 && elementIsZero(row, cell)) {
-    openCellAndCount(row, cell)
-    cell--
-  }
-  //go right
-  resetRowAndColumn()
-  while (cell < board[row].length && elementIsZero(row, cell)) {
-    openCellAndCount(row, cell)
-    cell++
-  }
-
-  //go up
-  resetRowAndColumn()
-  while (row >= 0 && elementIsZero(row, cell)) {
-    openCellAndCount(row, cell)
-    row--
-  }
-
-  //go down
-  resetRowAndColumn()
-  while (row < board.length && elementIsZero(row, cell)) {
-    openCellAndCount(row, cell)
-    row++
+    visited.set(i, (visited.get(i) || new Set()).add(j))
+    if (j > 0 && !isVisited(visited, i, j - 1)) {
+      board[i][j - 1].reveal = true
+      if (board[i][j - 1].element === 0) {
+        stack.push([i, j - 1, visited])
+      }
+    }
+    if (i > 0 && !isVisited(visited, i - 1, j)) {
+      board[i - 1][j].reveal = true
+      if (board[i - 1][j].element === 0) {
+        stack.push([i - 1, j, visited])
+      }
+    }
+    if (j < size - 1 && !isVisited(visited, i, j + 1)) {
+      board[i][j+1].reveal = true
+      if (board[i][j + 1].element === 0 ) {
+        stack.push([i, j + 1, visited])
+      }
+    }
+    if (i < size - 1 && !isVisited(visited, i + 1, j)) {
+      board[i+1][j].reveal = true
+      if (board[i + 1][j].element === 0 ){
+        stack.push([i + 1, j, visited])
+      }
+    }
   }
 
-  //check diaganal
-  resetRowAndColumn()
-  //go toward top left
-  while (row >= 0 && cell >= 0 && elementIsZero(row, cell)) {
-    openCellAndCount(row, cell)
-    row--
-    cell--
-  }
-
-  //go toward top right
-  resetRowAndColumn()
-  while (row >= 0 && cell < board[row].length && elementIsZero(row, cell)) {
-    openCellAndCount(row, cell)
-    row--
-    cell++
-  }
-
-  //go toward bottom left
-  resetRowAndColumn()
-  while (row < board.length && cell >= 0 && elementIsZero(row, cell)) {
-    openCellAndCount(row, cell)
-    row++
-    cell--
-  }
-
-  //go toward bottom right
-  resetRowAndColumn()
-  while (row < board.length && cell < board.length && elementIsZero(row, cell)) {
-    openCellAndCount(row, cell)
-    row++
-    cell++
-  }
-  return { board, revealedCount: count, gameOver: false}
+  return { board, revealedCount: count, gameOver: false }
 }
 
 
