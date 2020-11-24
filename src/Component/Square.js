@@ -2,13 +2,13 @@ import React from 'react'
 
 const Square = (props) => {
   return (
-    <React.Fragment>
+    <React.Fragment
+    >
       { props.reveal ?
-          <button>
-            <p>{props.element}</p>
-          </button>
+          <button>{props.element}</button>
         :
-          <button></button>
+        <button onClick={props.onClick}> 
+        </button>
       }
     </React.Fragment>
   )
