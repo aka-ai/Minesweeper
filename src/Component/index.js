@@ -1,4 +1,4 @@
 import GameBoard from './Gameboard'
-import createBoard from './utilities'
+import createBoard, { writeBoard } from './utilities'
 export default GameBoard
-export {createBoard}
+export { createBoard, writeBoard }
