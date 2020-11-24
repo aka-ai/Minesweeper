@@ -8,7 +8,8 @@ class Gameboard extends Component {
   render() {
     return (
       <div className="game-board">
-        <h1>playerName</h1>
+        <h1>{this.props.playerWon ? 'You Won!' : ''}</h1>
+        <h1>{this.props.gameOver ? 'Game Over' : ''}</h1>
         {this.props.board.map((row, idx) => {
           return (
             <div key={idx} className='board-row'>

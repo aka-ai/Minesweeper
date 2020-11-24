@@ -48,6 +48,8 @@ class App extends Component {
     return (
       <div className="App">
         <Game 
+          playerWon={this.state.playerWon}
+          gameOver={this.state.gameOver}
           board={this.state.gameBoard}
           onClick={(e) => this.handleClick(e)}
         />
