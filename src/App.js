@@ -5,7 +5,7 @@ import Game, { createBoard, writeBoard } from './Component'
 class App extends Component {
   constructor() {
     super()
-    this.boards = createBoard(6)
+    this.boards = createBoard(10)
     this.openedBoard = this.boards.openedBoard
     this.state = {
       gameBoard: this.boards.closedBoard,
@@ -76,9 +76,16 @@ class App extends Component {
     return (
       <div className='App'>
         <div className='status'>
-        <h1>{this.state.playerWon ? 'You Won!' : ''}</h1>
-        <h1>{this.state.gameOver ? 'Game Over' : ''}</h1>
-        <button></button>
+          {
+            this.state.gameOver ?
+              <h1>'Game Over 😫'</h1> :
+              (
+                this.state.playerWon ?
+                  <h1>You won!</h1> :
+                  <h1>{(this.state.gameBoard.length * this.state.gameBoard.length) - this.state.revealedCount} to winning</h1>
+              )
+          }
+          <button></button>
         </div>
         <Game
           playerWon={this.state.playerWon}
