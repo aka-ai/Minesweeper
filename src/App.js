@@ -74,7 +74,12 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className='App'>
+        <div className='status'>
+        <h1>{this.state.playerWon ? 'You Won!' : ''}</h1>
+        <h1>{this.state.gameOver ? 'Game Over' : ''}</h1>
+        <button></button>
+        </div>
         <Game
           playerWon={this.state.playerWon}
           gameOver={this.state.gameOver}

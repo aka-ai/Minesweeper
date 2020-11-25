@@ -30,12 +30,14 @@ button {
 
 .App {
   display: flex;
-  flex-direction: row;
-  width: 100vh;
-  margin: auto;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.status {
+  min-height: 20vh;
 }
 
 .game-board {
   margin: auto;
-
 }

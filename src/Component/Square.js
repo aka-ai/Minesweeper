@@ -5,7 +5,7 @@ const Square = (props) => {
     <React.Fragment
     >
       { props.reveal ?
-        <button>{props.element !== 0 ? props.element : ''}</button>
+        <button style={{ background: '#d1d2d3'}}>{props.element !== 0 ? props.element : ''}</button>
         :
         <button
           onClick={props.onClick}
