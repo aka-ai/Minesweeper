@@ -29,7 +29,7 @@ const getRandomBombCells = (board, bombs) => {
 const countNeighbors = (board) => {
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board[i].length; j++) {
-      if (board[i][j].element === '💣') continue
+      if (board[i][j].element === '🧨') continue
 
       let element = 0
       if (topLeft(i, j, board)) element++
@@ -47,7 +47,7 @@ const countNeighbors = (board) => {
 }
 //top left
 const topLeft = (i, j, board) => {
-  if (i > 0 && j > 0 && board[i - 1][j - 1].element === '💣') {
+  if (i > 0 && j > 0 && board[i - 1][j - 1].element === '🧨') {
     return true
   } else {
     return false
@@ -55,7 +55,7 @@ const topLeft = (i, j, board) => {
 }
 //top
 const top = (i, j, board) => {
-  if (i > 0 && board[i - 1][j].element === '💣') {
+  if (i > 0 && board[i - 1][j].element === '🧨') {
     return true
   } else {
     return false
@@ -63,7 +63,7 @@ const top = (i, j, board) => {
 }
 //top right
 const topRight = (i, j, board) => {
-  if (i > 0 && j < board[i].length - 1 && board[i - 1][j + 1].element === '💣') {
+  if (i > 0 && j < board[i].length - 1 && board[i - 1][j + 1].element === '🧨') {
     return true
   } else {
     return false
@@ -71,7 +71,7 @@ const topRight = (i, j, board) => {
 }
 //right
 const right = (i, j, board) => {
-  if (j < board[i].length - 1 && board[i][j + 1].element === '💣') {
+  if (j < board[i].length - 1 && board[i][j + 1].element === '🧨') {
     return true
   } else {
     return false
@@ -79,7 +79,7 @@ const right = (i, j, board) => {
 }
 //right bottom
 const bottomRight = (i, j, board) => {
-  if (i < board.length - 1 && j < board[i].length - 1 && board[i + 1][j + 1].element === '💣') {
+  if (i < board.length - 1 && j < board[i].length - 1 && board[i + 1][j + 1].element === '🧨') {
     return true
   } else {
     return false
@@ -87,7 +87,7 @@ const bottomRight = (i, j, board) => {
 }
 //bottom
 const bottom = (i, j, board) => {
-  if (i < board.length - 1 && board[i + 1][j].element === '💣') {
+  if (i < board.length - 1 && board[i + 1][j].element === '🧨') {
     return true
   } else {
     return false
@@ -95,7 +95,7 @@ const bottom = (i, j, board) => {
 }
 //left bottom
 const bottomLeft = (i, j, board) => {
-  if (j > 0 && i < board.length - 1 && board[i + 1][j - 1].element === '💣') {
+  if (j > 0 && i < board.length - 1 && board[i + 1][j - 1].element === '🧨') {
     return true
   } else {
     return false
@@ -103,7 +103,7 @@ const bottomLeft = (i, j, board) => {
 }
 //left
 const left = (i, j, board) => {
-  if (j > 0 && board[i][j - 1].element === '💣') {
+  if (j > 0 && board[i][j - 1].element === '🧨') {
     return true
   } else {
     return false
@@ -115,8 +115,8 @@ const createBoard = (size) => {
   const randomBombCells = getRandomBombCells(gameBoard.openedBoard, size)
   while (randomBombCells.length) {
     let [row, column] = randomBombCells.pop()
-    gameBoard.openedBoard[row][column].element = '💣'
-    gameBoard.closedBoard[row][column].element = '💣'
+    gameBoard.openedBoard[row][column].element = '🧨'
+    gameBoard.closedBoard[row][column].element = '🧨'
   }
 
   return { openedBoard: countNeighbors(gameBoard.openedBoard), closedBoard: countNeighbors(gameBoard.closedBoard) }
@@ -128,7 +128,7 @@ const writeBoard = (board, cellProp, revealedCount, openedBoard) => {
 
   if (element === 0) {
     return checkNeighbors(i, j, board, revealedCount)
-  } else if (element === '💣') {
+  } else if (element === '🧨') {
     return { board: openedBoard, revealedCount, gameOver: true }
   } else {
     board[i][j].reveal = true

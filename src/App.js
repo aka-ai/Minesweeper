@@ -69,7 +69,17 @@ class App extends Component {
         revealedCount: newBoard.revealedCount
       })
     }
-
+  }
+  newGame() {
+    this.boards = createBoard(10)
+    this.openedBoard = this.boards.openedBoard
+    this.setState({
+      gameBoard: this.boards.closedBoard,
+      revealedCount: 0,
+      playerWon: false,
+      gameOver: false,
+      ctrKeyPressed: false
+    })
   }
 
   render() {
@@ -78,14 +88,19 @@ class App extends Component {
         <div className='status'>
           {
             this.state.gameOver ?
-              <h1>'Game Over 😫'</h1> :
+              <h1>Game Over 😫</h1> :
               (
                 this.state.playerWon ?
-                  <h1>You won!</h1> :
+                  <h1>You won 😬!</h1> :
                   <h1>{(this.state.gameBoard.length * this.state.gameBoard.length) - this.state.revealedCount} to winning</h1>
               )
           }
-          <button></button>
+          <button
+           className='new-game'
+           onClick={() => this.newGame()}
+          >
+            new game
+          </button>
         </div>
         <Game
           playerWon={this.state.playerWon}

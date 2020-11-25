@@ -47,3 +47,9 @@ button {
 .game-board {
   margin: auto;
 }
+
+.new-game {
+  width: 150px;
+  height: 50px;
+  color: coral;
+}
