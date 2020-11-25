@@ -5,7 +5,7 @@ import Game, { createBoard, writeBoard } from './Component'
 class App extends Component {
   constructor() {
     super()
-    this.boards = createBoard(10)
+    this.boards = createBoard(6)
     this.openedBoard = this.boards.openedBoard
     this.state = {
       gameBoard: this.boards.closedBoard,
@@ -59,7 +59,7 @@ class App extends Component {
       })
     } else if (newBoard.gameOver) {
       this.setState({
-        gameBoard: newBoard.board,
+        gameBoard: this.openedBoard,
         revealedCount: newBoard.revealedCount,
         gameOver: newBoard.gameOver
       })
