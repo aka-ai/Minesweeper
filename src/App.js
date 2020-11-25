@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import './App.css';
-import Game, {createBoard, writeBoard} from './Component'
+import Game, { createBoard, writeBoard } from './Component'
 
 class App extends Component {
   constructor() {
@@ -9,13 +9,40 @@ class App extends Component {
     this.openedBoard = this.boards.openedBoard
     this.state = {
       gameBoard: this.boards.closedBoard,
-      cellPicked: null,
       revealedCount: 0,
       playerWon: false,
       gameOver: false,
+      ctrKeyPressed: false
     }
+    this.handleRightClick = this.handleRightClick.bind(this)
+    this.disableContextMenu = this.disableContextMenu.bind(this)
   }
-  handleClick(cell) {
+
+  componentDidMount() {
+    document.addEventListener('contextmenu', this.disableContextMenu)
+  }
+
+  disableContextMenu(e) {
+    e.preventDefault()
+  }
+
+  handleRightClick(cell, e) {
+    if (!this.isRightClick(e)) {
+      return
+    }
+    if (cell.reveal) return
+    const board = this.state.gameBoard.slice()
+    board[cell.id[0]][cell.id[1]].flag = !board[cell.id[0]][cell.id[1]].flag
+    this.setState({
+      gameBoard: board
+    })
+  }
+
+  isRightClick(e) {
+    return e.button === 2 || (e.button === 0 && e.ctrlKey)
+  }
+
+  handleClick(cell, e) {
     const gameBoard = this.state.gameBoard.slice()
     const size = gameBoard.length
 
@@ -24,9 +51,9 @@ class App extends Component {
     const newBoard = writeBoard(gameBoard, cell, this.state.revealedCount, this.openedBoard)
 
     //if player opens all valid cells >> declare winning
-    if(newBoard.revealedCount === (size * size) - size) {
+    if (newBoard.revealedCount === (size * size) - size) {
       this.setState({
-        gameBoard: newBoard.board,
+        gameBoard: this.openedBoard,
         revealedCount: newBoard.revealedCount,
         playerWon: true
       })
@@ -44,14 +71,16 @@ class App extends Component {
     }
 
   }
+
   render() {
     return (
       <div className="App">
-        <Game 
+        <Game
           playerWon={this.state.playerWon}
           gameOver={this.state.gameOver}
           board={this.state.gameBoard}
-          onClick={(e) => this.handleClick(e)}
+          onClick={(cell, e) => this.handleClick(cell, e)}
+          handleRightClick={(cell, e) => this.handleRightClick(cell, e)}
         />
       </div>
     )

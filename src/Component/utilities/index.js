@@ -6,8 +6,8 @@ const board = (size) => {
     const close = []
     const open = []
     for (let j = 0; j < size; j++) {
-      close.push({ id: [i, j], element: null, reveal: false })
-      open.push({ id: [i, j], element: null, reveal: true })
+      close.push({ id: [i, j], element: null, reveal: false, flag: false })
+      open.push({ id: [i, j], element: null, reveal: true, flag: false })
     }
     closedBoard.push(close)
     openedBoard.push(open)
@@ -157,8 +157,8 @@ const checkNeighbors = (i, j, board, revealedCount) => {
     }
     visited.set(i, (visited.get(i) || new Set()).add(j))
     if (j > 0 && !isVisited(visited, i, j - 1)) {
-      if (!board[i][j-1].reveal) {
-        board[i][j-1].reveal = true
+      if (!board[i][j - 1].reveal) {
+        board[i][j - 1].reveal = true
         count++
       }
       if (board[i][j - 1].element === 0) {
@@ -166,8 +166,8 @@ const checkNeighbors = (i, j, board, revealedCount) => {
       }
     }
     if (i > 0 && !isVisited(visited, i - 1, j)) {
-      if (!board[i-1][j].reveal) {
-        board[i-1][j].reveal = true
+      if (!board[i - 1][j].reveal) {
+        board[i - 1][j].reveal = true
         count++
       }
       if (board[i - 1][j].element === 0) {
@@ -175,20 +175,20 @@ const checkNeighbors = (i, j, board, revealedCount) => {
       }
     }
     if (j < size - 1 && !isVisited(visited, i, j + 1)) {
-      if (!board[i][j+1].reveal) {
-        board[i][j+1].reveal = true
+      if (!board[i][j + 1].reveal) {
+        board[i][j + 1].reveal = true
         count++
       }
-      if (board[i][j + 1].element === 0 ) {
+      if (board[i][j + 1].element === 0) {
         stack.push([i, j + 1, visited])
       }
     }
     if (i < size - 1 && !isVisited(visited, i + 1, j)) {
-      if (!board[i+1][j].reveal) {
-        board[i+1][j].reveal = true
+      if (!board[i + 1][j].reveal) {
+        board[i + 1][j].reveal = true
         count++
       }
-      if (board[i + 1][j].element === 0 ){
+      if (board[i + 1][j].element === 0) {
         stack.push([i + 1, j, visited])
       }
     }

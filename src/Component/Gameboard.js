@@ -1,10 +1,10 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Square from './Square'
 class Gameboard extends Component {
   constructor(props) {
     super(props)
-
   }
+
   render() {
     return (
       <div className="game-board">
@@ -20,7 +20,11 @@ class Gameboard extends Component {
                     id={cell.id}
                     element={cell.element}
                     reveal={cell.reveal}
-                    onClick={() => this.props.onClick(cell)}
+                    flag={cell.flag}
+                    onClick={(e) => this.props.onClick(cell, e)}
+                    handleRightClick={(e) => {
+                      this.props.handleRightClick(cell, e)
+                    }}
                   />
                 )
               })}
