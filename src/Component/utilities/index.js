@@ -127,7 +127,7 @@ const writeBoard = (board, cellProp, revealedCount, openedBoard) => {
   const element = cellProp.element
 
   if (element === 0) {
-    return checkNeighbors(i, j, board)
+    return checkNeighbors(i, j, board, revealedCount)
   } else if (element === '💣') {
     return { board: openedBoard, revealedCount, gameOver: true }
   } else {
@@ -137,9 +137,10 @@ const writeBoard = (board, cellProp, revealedCount, openedBoard) => {
   }
 }
 const checkNeighbors = (i, j, board, revealedCount) => {
-  const stack = [[i, j, new Map()]]
+  const stack = [[i, j]]
   const size = board.length
   let count = revealedCount
+  const visited = new Map()
   const isVisited = (map, i, j) => {
     if (map.has(i) && map.get(i).has(j)) {
       return true
@@ -148,30 +149,45 @@ const checkNeighbors = (i, j, board, revealedCount) => {
     }
   }
   while (stack.length) {
-    let [i, j, visited] = stack.pop()
-    board[i][j].reveal = true
-    count++
+    let [i, j] = stack.pop()
+
+    if (!board[i][j].reveal) {
+      board[i][j].reveal = true
+      count++
+    }
     visited.set(i, (visited.get(i) || new Set()).add(j))
     if (j > 0 && !isVisited(visited, i, j - 1)) {
-      board[i][j - 1].reveal = true
+      if (!board[i][j-1].reveal) {
+        board[i][j-1].reveal = true
+        count++
+      }
       if (board[i][j - 1].element === 0) {
         stack.push([i, j - 1, visited])
       }
     }
     if (i > 0 && !isVisited(visited, i - 1, j)) {
-      board[i - 1][j].reveal = true
+      if (!board[i-1][j].reveal) {
+        board[i-1][j].reveal = true
+        count++
+      }
       if (board[i - 1][j].element === 0) {
         stack.push([i - 1, j, visited])
       }
     }
     if (j < size - 1 && !isVisited(visited, i, j + 1)) {
-      board[i][j+1].reveal = true
+      if (!board[i][j+1].reveal) {
+        board[i][j+1].reveal = true
+        count++
+      }
       if (board[i][j + 1].element === 0 ) {
         stack.push([i, j + 1, visited])
       }
     }
     if (i < size - 1 && !isVisited(visited, i + 1, j)) {
-      board[i+1][j].reveal = true
+      if (!board[i+1][j].reveal) {
+        board[i+1][j].reveal = true
+        count++
+      }
       if (board[i + 1][j].element === 0 ){
         stack.push([i + 1, j, visited])
       }
