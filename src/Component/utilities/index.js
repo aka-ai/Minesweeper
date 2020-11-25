@@ -1,18 +1,13 @@
 const board = (size) => {
-  //each cell in the board has {id, color}
-  const closedBoard = []
-  const openedBoard = []
+  const board = []
   for (let i = 0; i < size; i++) {
-    const close = []
-    const open = []
+    const row = []
     for (let j = 0; j < size; j++) {
-      close.push({ id: [i, j], element: null, reveal: false, flag: false })
-      open.push({ id: [i, j], element: null, reveal: true, flag: false })
+      row.push({ id: [i, j], element: null, reveal: false, flag: false })
     }
-    closedBoard.push(close)
-    openedBoard.push(open)
+    board.push(row)
   }
-  return { closedBoard, openedBoard }
+  return board
 }
 
 const getRandomBombCells = (board, bombs) => {
@@ -112,24 +107,22 @@ const left = (i, j, board) => {
 
 const createBoard = (size) => {
   const gameBoard = board(size)
-  const randomBombCells = getRandomBombCells(gameBoard.openedBoard, size)
+  const randomBombCells = getRandomBombCells(gameBoard, size)
   while (randomBombCells.length) {
     let [row, column] = randomBombCells.pop()
-    gameBoard.openedBoard[row][column].element = '🧨'
-    gameBoard.closedBoard[row][column].element = '🧨'
+    gameBoard[row][column].element = '🧨'
   }
-
-  return { openedBoard: countNeighbors(gameBoard.openedBoard), closedBoard: countNeighbors(gameBoard.closedBoard) }
+  return countNeighbors(gameBoard)
 }
 
-const writeBoard = (board, cellProp, revealedCount, openedBoard) => {
+const writeBoard = (board, cellProp, revealedCount) => {
   let [i, j] = cellProp.id
   const element = cellProp.element
 
   if (element === 0) {
     return checkNeighbors(i, j, board, revealedCount)
   } else if (element === '🧨') {
-    return { board: openedBoard, revealedCount, gameOver: true }
+    return { board: board, revealedCount, gameOver: true }
   } else {
     board[i][j].reveal = true
     revealedCount++
@@ -142,11 +135,7 @@ const checkNeighbors = (i, j, board, revealedCount) => {
   let count = revealedCount
   const visited = new Map()
   const isVisited = (map, i, j) => {
-    if (map.has(i) && map.get(i).has(j)) {
-      return true
-    } else {
-      return false
-    }
+    return (map.has(i) && map.get(i).has(j)) ? true : false
   }
   while (stack.length) {
     let [i, j] = stack.pop()
@@ -193,10 +182,8 @@ const checkNeighbors = (i, j, board, revealedCount) => {
       }
     }
   }
-
   return { board, revealedCount: count, gameOver: false }
 }
-
 
 export default createBoard
 export { writeBoard }

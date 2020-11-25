@@ -19,6 +19,8 @@ class Gameboard extends Component {
                     element={cell.element}
                     reveal={cell.reveal}
                     flag={cell.flag}
+                    gameOver={this.props.gameOver}
+                    playerWon={this.props.playerWon}
                     onClick={(e) => this.props.onClick(cell, e)}
                     handleRightClick={(e) => {
                       this.props.handleRightClick(cell, e)

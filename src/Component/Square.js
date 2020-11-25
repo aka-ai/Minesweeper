@@ -4,9 +4,13 @@ const Square = (props) => {
   return (
     <React.Fragment
     >
-      { props.reveal ?
-        <button style={{ background: '#d1d2d3'}}>{props.element !== 0 ? props.element : ''}</button>
-        :
+      { props.reveal || props.gameOver || props.playerWon ?
+        <button
+          style={{ background: '#d1d2d3' }}
+        >
+          {props.element !== 0 ? props.element : ''}
+        </button>
+          :
         <button
           onClick={props.onClick}
           onMouseDown={props.handleRightClick}
