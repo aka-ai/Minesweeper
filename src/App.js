@@ -16,31 +16,33 @@ class App extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('contextmenu', this.disableContextMenu)
+    // disable default right click behavior so we can add flags
+    document.addEventListener('contextmenu', (this.disableContextMenu))
   }
-
+  //todod refactor if possible
   disableContextMenu(e) {
     e.preventDefault()
   }
 
   handleRightClick(cell, e) {
-    if (!this.isRightClick(e)) {
-      return
-    }
-    if (cell.reveal) return
-    const board = this.state.gameBoard.slice()
-    board[cell.id[0]][cell.id[1]].flag = !board[cell.id[0]][cell.id[1]].flag
-    this.setState({
-      gameBoard: board
-    })
+    if (!this.isRightClick(e) || this.isCellClickable(cell)) return
+    const gameBoard = this.state.gameBoard.slice()
+    const updatedCell = gameBoard[cell.id[0]][cell.id[1]]
+    updatedCell.flag = !updatedCell.flag
+    this.setState({ gameBoard })
+  }
+
+  isCellClickable(cell) {
+    return (cell.reveal && !this.state.gameOver && !this.state.playerWon)
   }
 
   isRightClick(e) {
+    // todo: check if this captures all right clicks (two finger tap, right clicks in windows, on mobile)
     return e.button === 2 || (e.button === 0 && e.ctrlKey)
   }
 
   handleClick(cell) {
-    if (cell.reveal || this.gameOver || this.playerWon) return
+    if (this.isCellClickable(cell)) return
     const gameBoard = this.state.gameBoard.slice()
     const size = gameBoard.length
     const newBoard = writeBoard(gameBoard, cell, this.state.revealedCount)
@@ -84,8 +86,8 @@ class App extends Component {
               )
           }
           <button
-           className='new-game'
-           onClick={() => this.newGame()}
+            className='new-game'
+            onClick={() => this.newGame()}
           >
             new game
           </button>
