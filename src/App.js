@@ -5,6 +5,7 @@ import GameBoard, { createBoard, writeBoard, GameStatus } from './Component'
 class App extends Component {
   constructor() {
     super()
+    this.levels = { easy: 6, medium: 10, hard: 15 }
     this.state = {
       gameBoard: createBoard(10),
       revealedCount: 0,
@@ -62,13 +63,16 @@ class App extends Component {
       })
     }
   }
-  newGame() {
+  newGame(boardSize) {
     this.setState({
-      gameBoard: createBoard(10),
+      gameBoard: createBoard(boardSize),
       revealedCount: 0,
       playerWon: false,
       gameOver: false,
     })
+  }
+  handleLevelButtonClick(size) {
+    this.newGame(size)
   }
 
   render() {
@@ -81,12 +85,20 @@ class App extends Component {
             revealedCount={this.state.revealedCount}
             boardSize={this.state.gameBoard.length}
           />
-          <button
-            className='new-game'
-            onClick={() => this.newGame()}
-          >
-            new game
-          </button>
+          <div className='level-buttons'>
+            {
+              Object.entries(this.levels).map(([level, size]) => {
+                return (
+                  <button
+                    key={level}
+                    onClick={() => this.handleLevelButtonClick(size)}
+                  >
+                    {level}
+                  </button>
+                )
+              })
+            }
+          </div>
         </div>
         <GameBoard
           playerWon={this.state.playerWon}

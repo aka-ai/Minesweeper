@@ -12,11 +12,16 @@ code {
     monospace;
 }
 
+h1 {
+  color: #1EA896;
+  
+}
+
 button {
   font-size: 20px;
   width: 50px;
   height: 50px;
-  color: teal;
+  color: #1EA896;
   background: linear-gradient(259.07deg,
   rgb(250, 247, 250) 4.07%,
   rgb(249, 242, 248) 100%);
@@ -31,25 +36,31 @@ button {
 .App {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
 }
 
 .status {
-  min-height: 20vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   margin: auto;
-
+  padding: 20px;
 }
 
 .game-board {
   margin: auto;
 }
 
-.new-game {
-  width: 150px;
-  height: 50px;
-  color: coral;
+.level-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.level-buttons button {
+  width: 100px;
+  height: 40px;
+  color: #ff7f50;
+  border-radius: 5px;
 }
