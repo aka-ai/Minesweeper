@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css';
-import Game, { createBoard, writeBoard } from './Component'
+import GameBoard, { createBoard, writeBoard, GameStatus } from './Component'
 
 class App extends Component {
   constructor() {
@@ -47,16 +47,15 @@ class App extends Component {
     const size = gameBoard.length
     const newBoard = writeBoard(gameBoard, cell, this.state.revealedCount)
 
-    //if player opens all valid cells >> declare winning
-    if (newBoard.revealedCount === (size * size) - size) {
+    if (newBoard.revealedCount === (size * size) - size) { //player won
       this.setState({
         playerWon: true
       })
-    } else if (newBoard.gameOver) {
+    } else if (newBoard.gameOver) { // game over
       this.setState({
         gameOver: true
       })
-    } else {
+    } else { // continue playing
       this.setState({
         gameBoard: newBoard.board,
         revealedCount: newBoard.revealedCount
@@ -76,15 +75,12 @@ class App extends Component {
     return (
       <div className='App'>
         <div className='status'>
-          {
-            this.state.gameOver ?
-              <h1>Game Over 😫</h1> :
-              (
-                this.state.playerWon ?
-                  <h1>You won 😬!</h1> :
-                  <h1>{(this.state.gameBoard.length * this.state.gameBoard.length) - this.state.revealedCount} to winning</h1>
-              )
-          }
+          <GameStatus
+            playerWon={this.state.playerWon}
+            gameOver={this.state.gameOver}
+            revealedCount={this.state.revealedCount}
+            boardSize={this.state.gameBoard.length}
+          />
           <button
             className='new-game'
             onClick={() => this.newGame()}
@@ -92,7 +88,7 @@ class App extends Component {
             new game
           </button>
         </div>
-        <Game
+        <GameBoard
           playerWon={this.state.playerWon}
           gameOver={this.state.gameOver}
           board={this.state.gameBoard}
