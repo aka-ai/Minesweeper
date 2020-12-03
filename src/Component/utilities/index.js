@@ -21,107 +21,23 @@ const getRandomBombCells = (board, bombs) => {
   }
   return randomBombCells
 }
-const countNeighbors = (board) => {
-  for (let i = 0; i < board.length; i++) {
-    for (let j = 0; j < board[i].length; j++) {
-      if (board[i][j].element === '🧨') continue
-
-      let element = 0
-      if (topLeft(i, j, board)) element++
-      if (top(i, j, board)) element++
-      if (topRight(i, j, board)) element++
-      if (right(i, j, board)) element++
-      if (bottomRight(i, j, board)) element++
-      if (bottom(i, j, board)) element++
-      if (bottomLeft(i, j, board)) element++
-      if (left(i, j, board)) element++
-      board[i][j].element = element
-    }
-  }
-  return board
-}
-//top left
-const topLeft = (i, j, board) => {
-  if (i > 0 && j > 0 && board[i - 1][j - 1].element === '🧨') {
-    return true
-  } else {
-    return false
-  }
-}
-//top
-const top = (i, j, board) => {
-  if (i > 0 && board[i - 1][j].element === '🧨') {
-    return true
-  } else {
-    return false
-  }
-}
-//top right
-const topRight = (i, j, board) => {
-  if (i > 0 && j < board[i].length - 1 && board[i - 1][j + 1].element === '🧨') {
-    return true
-  } else {
-    return false
-  }
-}
-//right
-const right = (i, j, board) => {
-  if (j < board[i].length - 1 && board[i][j + 1].element === '🧨') {
-    return true
-  } else {
-    return false
-  }
-}
-//right bottom
-const bottomRight = (i, j, board) => {
-  if (i < board.length - 1 && j < board[i].length - 1 && board[i + 1][j + 1].element === '🧨') {
-    return true
-  } else {
-    return false
-  }
-}
-//bottom
-const bottom = (i, j, board) => {
-  if (i < board.length - 1 && board[i + 1][j].element === '🧨') {
-    return true
-  } else {
-    return false
-  }
-}
-//left bottom
-const bottomLeft = (i, j, board) => {
-  if (j > 0 && i < board.length - 1 && board[i + 1][j - 1].element === '🧨') {
-    return true
-  } else {
-    return false
-  }
-}
-//left
-const left = (i, j, board) => {
-  if (j > 0 && board[i][j - 1].element === '🧨') {
-    return true
-  } else {
-    return false
-  }
-}
-
-const createBoard = (size) => {
+const createBoard = (size, bomb) => {
   const gameBoard = board(size)
   const randomBombCells = getRandomBombCells(gameBoard, size)
   while (randomBombCells.length) {
     let [row, column] = randomBombCells.pop()
-    gameBoard[row][column].element = '🧨'
+    gameBoard[row][column].element = bomb
   }
-  return countNeighbors(gameBoard)
+  return countNeighbors(gameBoard, bomb)
 }
 
-const writeBoard = (board, cellProp, revealedCount) => {
+const writeBoard = (board, cellProp, revealedCount, bomb) => {
   let [i, j] = cellProp.id
   const element = cellProp.element
 
   if (element === 0) {
     return checkNeighbors(i, j, board, revealedCount)
-  } else if (element === '🧨') {
+  } else if (element === bomb) {
     return { board: board, revealedCount, gameOver: true }
   } else {
     board[i][j].reveal = true
@@ -129,6 +45,91 @@ const writeBoard = (board, cellProp, revealedCount) => {
     return { board, revealedCount, gameOver: false }
   }
 }
+const countNeighbors = (board, bomb) => {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      if (board[i][j].element === bomb) continue
+
+      let element = 0
+      if (topLeft(i, j, board, bomb)) element++
+      if (top(i, j, board, bomb)) element++
+      if (topRight(i, j, board, bomb)) element++
+      if (right(i, j, board, bomb)) element++
+      if (bottomRight(i, j, board, bomb)) element++
+      if (bottom(i, j, board, bomb)) element++
+      if (bottomLeft(i, j, board, bomb)) element++
+      if (left(i, j, board, bomb)) element++
+      board[i][j].element = element
+    }
+  }
+  return board
+}
+//top left
+const topLeft = (i, j, board, bomb) => {
+  if (i > 0 && j > 0 && board[i - 1][j - 1].element === bomb) {
+    return true
+  } else {
+    return false
+  }
+}
+//top
+const top = (i, j, board, bomb) => {
+  if (i > 0 && board[i - 1][j].element === bomb) {
+    return true
+  } else {
+    return false
+  }
+}
+//top right
+const topRight = (i, j, board, bomb) => {
+  if (i > 0 && j < board[i].length - 1 && board[i - 1][j + 1].element === bomb) {
+    return true
+  } else {
+    return false
+  }
+}
+//right
+const right = (i, j, board, bomb) => {
+  if (j < board[i].length - 1 && board[i][j + 1].element === bomb) {
+    return true
+  } else {
+    return false
+  }
+}
+//right bottom
+const bottomRight = (i, j, board, bomb) => {
+  if (i < board.length - 1 && j < board[i].length - 1 && board[i + 1][j + 1].element === bomb) {
+    return true
+  } else {
+    return false
+  }
+}
+//bottom
+const bottom = (i, j, board, bomb) => {
+  if (i < board.length - 1 && board[i + 1][j].element === bomb) {
+    return true
+  } else {
+    return false
+  }
+}
+//left bottom
+const bottomLeft = (i, j, board, bomb) => {
+  if (j > 0 && i < board.length - 1 && board[i + 1][j - 1].element === bomb) {
+    return true
+  } else {
+    return false
+  }
+}
+//left
+const left = (i, j, board, bomb) => {
+  if (j > 0 && board[i][j - 1].element === bomb) {
+    return true
+  } else {
+    return false
+  }
+}
+
+
 const checkNeighbors = (i, j, board, revealedCount) => {
   const stack = [[i, j]]
   const size = board.length

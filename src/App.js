@@ -6,8 +6,9 @@ class App extends Component {
   constructor() {
     super()
     this.levels = { easy: 6, medium: 10, hard: 15 }
+    this.bomb = "💣"
     this.state = {
-      gameBoard: createBoard(10),
+      gameBoard: createBoard(10, this.bomb),
       revealedCount: 0,
       playerWon: false,
       gameOver: false
@@ -46,7 +47,7 @@ class App extends Component {
     if (this.isCellClickable(cell)) return
     const gameBoard = this.state.gameBoard.slice()
     const size = gameBoard.length
-    const newBoard = writeBoard(gameBoard, cell, this.state.revealedCount)
+    const newBoard = writeBoard(gameBoard, cell, this.state.revealedCount, this.bomb)
 
     if (newBoard.revealedCount === (size * size) - size) { //player won
       this.setState({
@@ -65,7 +66,7 @@ class App extends Component {
   }
   newGame(boardSize) {
     this.setState({
-      gameBoard: createBoard(boardSize),
+      gameBoard: createBoard(boardSize, this.bomb),
       revealedCount: 0,
       playerWon: false,
       gameOver: false,
